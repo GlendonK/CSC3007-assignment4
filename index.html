@@ -65,17 +65,28 @@
           balls.push(obj);
         });
 
-        
+        svg.append("defs").selectAll("marker")
+        .data([""])
+        .join("marker")
+        .attr("id", "arrow")
+        .attr("viewBox", "0 -5 10 10")
+        .attr("refX", 20)
+        .attr("refY", 0)
+        .attr("markerWidth", 6)
+        .attr("markerHeight", 6)
+        .attr("orient", "auto")
+        .append("path")
+        .attr("fill", "black")
+        .attr("d", 'M0,-5L10,0L0,5');
 
-        let linkpath = svg // draw the svg lines
-          .append("g")
-          .attr("id", "links")
-          .selectAll("path")
-          .data(links)
-          .enter()
-          .append("path")
-          .attr("fill", "none")
-          .attr("stroke", "black");
+        let linkpath = svg.append("g")
+        .attr("fill", "none")
+        .attr("stroke-width", 1.5)
+        .selectAll("path")
+        .data(links)
+        .join("path")
+        .attr("stroke", "black")
+        .attr("marker-end", d => `url(${new URL("#arrow", location)})`);
 
         let tooltip = svg.append("g");
 
@@ -180,15 +191,7 @@
             node.attr("cx", (d) => d.x).attr("cy", (d) => d.y);
             linkpath.attr(
               "d",
-              (d) =>
-                "M" +
-                d.source.x + // node123.x
-                "," +
-                d.source.y +
-                " " +
-                d.target.x +
-                "," +
-                d.target.y
+              d =>`M${d.source.x},${d.source.y}A0,0 0 0,1 ${d.target.x},${d.target.y}`
             ); // draw line between each ball using balls x y coordinates.
           });
         d3.select("#Gender").on("click", function () {
@@ -225,15 +228,7 @@
             node.attr("cx", (d) => d.x).attr("cy", (d) => d.y);
             linkpath.attr(
               "d",
-              (d) =>
-                "M" +
-                d.source.x + // node123.x
-                "," +
-                d.source.y +
-                " " +
-                d.target.x +
-                "," +
-                d.target.y
+              d =>`M${d.source.x},${d.source.y}A0,0 0 0,1 ${d.target.x},${d.target.y}`
             ); // draw line between each ball using balls x y coordinates.
           }).alphaTarget(0.01)
             .restart();
